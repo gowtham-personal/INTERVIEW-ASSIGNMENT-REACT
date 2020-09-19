@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
+import CONFIG_CONSTANTS from "../constants/configConstants";
 
 export const getMethod = async (url, header, params) => {
   try {
     const response = await axios({
       method: "get",
-      url: url,
+      url: `${CONFIG_CONSTANTS.DOMAIN}${url}`,
       params: params,
       headers: header
     });

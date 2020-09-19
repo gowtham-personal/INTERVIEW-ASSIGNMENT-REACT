@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { handleSignup } from "./authActions";
+import { getPolygonData } from "./geoActions";
 import { connect } from "react-redux";
 
 /**
@@ -8,8 +8,8 @@ import { connect } from "react-redux";
  */
 const mapDispatchToProps = dispatch => {
   return {
-    handleSignup: params => {
-      dispatch(handleSignup(params));
+    getPolygonData: params => {
+      dispatch(getPolygonData(params));
     }
   };
 };
@@ -25,15 +25,15 @@ const mapStateToProps = state => {
   };
 };
 
-const SignUpComponent = ({ history, handleSignup }) => {
+const AddressFormComponent = ({ history, getPolygonData }) => {
   const [state, setState] = useState({
-    userName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    street: "",
+    state: "",
+    country: "",
+    postalCode: "",
     errors: {}
   });
-  let emailRegex = /[^@]+@[^\.]+\..+/;
+
   const handleChange = e => {
     e.persist();
     delete state.errors[e.target.name];
@@ -53,43 +53,34 @@ const SignUpComponent = ({ history, handleSignup }) => {
         1
       )} is Required`;
     }
-    if (e.target.name == "email" && !emailRegex.test(e.target.value)) {
-      state.errors[e.target.name] = "Email is not valid";
-    }
-    if (
-      e.target.name == "confirm password" &&
-      e.target.value != state.password
-    ) {
-      state.errors[e.target.name] = "Confirm password and password must match";
-    }
     setState(prevState => ({
       ...prevState,
       errors: state.errors
     }));
   };
 
-  const signUp = e => {
+  const saveAddress = e => {
     e.preventDefault();
     if (
       Object.keys(state.errors).length == 0 &&
-      state.username &&
-      state.email &&
-      state.password &&
-      state["confirm password"]
+      state.street &&
+      state.state &&
+      state.country &&
+      state["postal code"]
     ) {
-      handleSignup({ ...state, history });
+      getPolygonData({ ...state, history });
     } else {
-      if (!state.username) {
-        state.errors.username = "Username is Required";
+      if (!state.street) {
+        state.errors.street = "Street is Required";
       }
-      if (!state.password) {
-        state.errors.password = "Password is Required";
+      if (!state.state) {
+        state.errors.state = "State is Required";
       }
-      if (!state.email) {
-        state.errors.email = "Email is Required";
+      if (!state.country) {
+        state.errors.country = "Country is Required";
       }
-      if (!state["confirm password"]) {
-        state.errors["confirm password"] = "Confirm password is Required";
+      if (!state["postal code"]) {
+        state.errors["postal code"] = "Postal code is Required";
       }
     }
     setState(prevState => ({
@@ -102,108 +93,105 @@ const SignUpComponent = ({ history, handleSignup }) => {
   return (
     <div className="signup-form">
       <form>
-        <h2>Sign Up</h2>
-        <p>Please fill in this form to create an account!</p>
+        <h2>Address Lookup</h2>
+        <p>Please fill in this form to create an address!</p>
         <hr />
-        <div className="form-group">
+        <div className="form-group address-form">
           <div className="input-group">
             <div className="input-group-prepend">
               <span className="input-group-text">
-                <span className="fa fa-user" />
+                <span className="fa fa-street-view" />
               </span>
             </div>
             <input
               type="text"
               className="form-control"
-              name="username"
-              placeholder="Username"
+              name="street"
+              placeholder="Street"
               required="required"
               onBlur={e => validateOnBlur(e)}
               onChange={e => handleChange(e)}
             />
           </div>
-          {state.errors.username && (
-            <div className="error-text">{state.errors.username}</div>
+          {state.errors.street && (
+            <div className="error-text">{state.errors.street}</div>
           )}
         </div>
         <div className="form-group">
           <div className="input-group">
             <div className="input-group-prepend">
               <span className="input-group-text">
-                <i className="fa fa-paper-plane" />
+                <i className="fa fa-flag" />
               </span>
             </div>
             <input
-              type="email"
+              type="text"
               className="form-control"
-              name="email"
-              placeholder="Email Address"
+              name="state"
+              placeholder="State"
               required="required"
               onBlur={e => validateOnBlur(e)}
               onChange={e => handleChange(e)}
             />
           </div>
-          {state.errors.email && (
-            <div className="error-text">{state.errors.email}</div>
+          {state.errors.state && (
+            <div className="error-text">{state.errors.state}</div>
           )}
         </div>
         <div className="form-group">
           <div className="input-group">
             <div className="input-group-prepend">
               <span className="input-group-text">
-                <i className="fa fa-lock" />
+                <i className="fa fa-file-zip-o" />
               </span>
             </div>
             <input
               type="text"
               className="form-control"
-              name="password"
-              placeholder="Password"
+              name="country"
+              placeholder="Country"
+              maxLength="30"
               required="required"
               onBlur={e => validateOnBlur(e)}
               onChange={e => handleChange(e)}
             />
           </div>
-          {state.errors.password && (
-            <div className="error-text">{state.errors.password}</div>
+          {state.errors.country && (
+            <div className="error-text">{state.errors.country}</div>
           )}
         </div>
         <div className="form-group">
           <div className="input-group">
             <div className="input-group-prepend">
               <span className="input-group-text">
-                <i className="fa fa-lock" />
-                <i className="fa fa-check" />
+                <i className="fa fa-map-marker" />
               </span>
             </div>
             <input
               type="text"
               className="form-control"
-              name="confirm password"
-              placeholder="Confirm Password"
+              name="postal code"
+              placeholder="Postal Code"
               required="required"
+              maxLength="30"
               onBlur={e => validateOnBlur(e)}
               onChange={e => handleChange(e)}
             />
           </div>
-          {state.errors["confirm password"] && (
-            <div className="error-text">{state.errors["confirm password"]}</div>
+          {state.errors["postal code"] && (
+            <div className="error-text">{state.errors["postal code"]}</div>
           )}
         </div>
         <div className="form-group">
           <button
             type="submit"
             className="btn btn-primary btn-lg"
-            onClick={e => signUp(e)}
+            onClick={e => saveAddress(e)}
           >
-            Sign Up
+            Submit
           </button>
         </div>
       </form>
-      <div className="text-center naviagation-text">
-        Already have an account?{" "}
-        <a onClick={() => history.push("/")}>Login here</a>
-      </div>
     </div>
   );
 };
@@ -211,4 +199,7 @@ const SignUpComponent = ({ history, handleSignup }) => {
 /**
  * To connect your state and actions to child component
  */
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddressFormComponent);

@@ -2,6 +2,7 @@ body {
   color: #fff;
   background: #19aa8d;
   font-family: "Roboto", sans-serif;
+  overflow: inherit !important;
 }
 .form-control {
   font-size: 15px;
@@ -101,4 +102,10 @@ body {
   margin-top: 5px;
   color: red;
   font-size: 11px;
+}
+
+#map {
+  position: fixed !important;
+  height: 100% !important;
+  width: 100% !important;
 }

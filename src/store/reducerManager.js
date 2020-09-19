@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import authReducer from "../screens/auth/authReducers";
+import geoReducer from "../screens/geoCoding/geoReducers";
 
 const rootReducer = combineReducers({
-  authReducer
+  geoReducer
 });
 export default rootReducer;
