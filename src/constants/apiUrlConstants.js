@@ -1,6 +1,6 @@
 const API_URL_CONSTANTS = {
-  LOGIN: "https://dev-assignment-node-api.herokuapp.com/api/auth/login",
-  SIGN_UP: "https://dev-assignment-node-api.herokuapp.com/api/auth/signup"
+  FORWARD_GEO_CODING: "/api/geocode/forward",
+  REVERSE_GEO_CODING: "/api/geocode/reverse"
 };
 
 export default API_URL_CONSTANTS;

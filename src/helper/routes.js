@@ -1,8 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import LoginComponent from "../screens/auth/loginComponent";
-import SignupComponent from "../screens/auth/signupComponent";
-import DashboardComponent from "../screens/dashboard/dashboardComponent";
+import AddressMapContainer from "../screens/geoCoding/addressMapContainer";
+import AddressFormComponent from "../screens/geoCoding/addressFormComponent";
 class RoutesComponent extends React.Component {
   render() {
     return (
@@ -14,7 +13,7 @@ class RoutesComponent extends React.Component {
             render={props => {
               return (
                 <React.Fragment>
-                  <LoginComponent {...props} />
+                  <AddressFormComponent {...props} />
                 </React.Fragment>
               );
             }}
@@ -22,25 +21,12 @@ class RoutesComponent extends React.Component {
         </Switch>
         <Switch>
           <Route
-            path="/sign-up"
+            path="/map"
             exact
             render={props => {
               return (
                 <React.Fragment>
-                  <SignupComponent {...props} />
-                </React.Fragment>
-              );
-            }}
-          />
-        </Switch>
-        <Switch>
-          <Route
-            path="/dashboard"
-            exact
-            render={props => {
-              return (
-                <React.Fragment>
-                  <DashboardComponent {...props} />
+                  <AddressMapContainer {...props} />
                 </React.Fragment>
               );
             }}
